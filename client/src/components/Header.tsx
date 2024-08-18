@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 15:45:56
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-18 15:57:16
+ * @LastEditTime: 2024-08-18 23:22:36
  */
 "use client";
 
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
   }
   return (
     <div>
-      <div className="w-screen h-14 flex justify-between items-center pl-4 pr-4">
+      <div className="h-14 flex justify-between items-center pl-4 pr-4">
         {contextHolder}
         <div className="w-1/3 flex justify-around">
           <span onClick={() => handleTo("/")}>Home</span>
