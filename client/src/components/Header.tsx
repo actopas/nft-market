@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 15:45:56
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-18 23:22:36
+ * @LastEditTime: 2024-08-19 00:44:35
  */
 "use client";
 
@@ -86,8 +86,7 @@ const Header: React.FC = () => {
         {contextHolder}
         <div className="w-1/3 flex justify-around">
           <span onClick={() => handleTo("/")}>Home</span>
-          <span onClick={() => handleTo("/market")}>Market</span>
-          <span onClick={() => handleTo("/create")}>Create</span>
+          <span onClick={() => handleTo("/establish")}>Establish</span>
           <span onClick={() => handleTo("/mine")}>Mine</span>
         </div>
         {!account ? (

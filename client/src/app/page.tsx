@@ -27,7 +27,6 @@ const hypeList = [
 const Home: React.FC = () => {
   return (
     <div>
-      <Header />
       <Banner />
       <ItemList title="Recommend NFTs" itemList={recommendList} />
       <ItemList title="Notable NFTs" itemList={hypeList} />
