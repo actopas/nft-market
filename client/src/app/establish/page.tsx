@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 02:11:23
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-19 02:07:29
+ * @LastEditTime: 2024-08-19 18:00:44
  */
 
 import React from "react";
@@ -13,11 +13,13 @@ import ButtonCard from "@/components/ButtonCard";
 const creatList = [
   {
     title: "Drop",
+    path: "/establish/deploy-contract",
     content:
       "A drop is the release of a new project. This usually happens on a specified date and time. Items will be revealed after they have been purchased.",
   },
   {
     title: "Collection or item",
+    path: "/establish/mint",
     content:
       "Create a new NFT collection or add an NFT to an existing one. Your items will display immediately. List for sale when you're ready.",
   },

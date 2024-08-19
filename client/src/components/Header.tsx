@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 15:45:56
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-19 00:44:35
+ * @LastEditTime: 2024-08-19 15:14:55
  */
 "use client";
 
@@ -85,9 +85,18 @@ const Header: React.FC = () => {
       <div className="h-14 flex justify-between items-center pl-4 pr-4">
         {contextHolder}
         <div className="w-1/3 flex justify-around">
-          <span onClick={() => handleTo("/")}>Home</span>
-          <span onClick={() => handleTo("/establish")}>Establish</span>
-          <span onClick={() => handleTo("/mine")}>Mine</span>
+          <span className="cursor-pointer" onClick={() => handleTo("/")}>
+            Home
+          </span>
+          <span
+            className="cursor-pointer"
+            onClick={() => handleTo("/establish")}
+          >
+            Establish
+          </span>
+          <span className="cursor-pointer" onClick={() => handleTo("/account")}>
+            Account
+          </span>
         </div>
         {!account ? (
           <Button className="" onClick={linkMetaMask}>
