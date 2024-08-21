@@ -3,14 +3,14 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 02:09:04
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-20 01:36:40
+ * @LastEditTime: 2024-08-22 01:28:29
  */
 "use client";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import ItemList from "@/components/ItemList";
-import { getRecommendNfts, getHotNfts } from "../api";
+import { getRecommandedNfts, getNotableNfts } from "@/api/index";
 import "./globals.css";
 import "antd/dist/reset.css"; // Ant Design 的重置样式
 const Banner = dynamic(() => import("@/components/Banner"), { ssr: false });
@@ -38,15 +38,16 @@ const Home: React.FC = () => {
   const [hotNfts, setHotNfts] = useState([]);
 
   useEffect(() => {
+    console.log("Component mounted or re-rendered");
     // 获取推荐NFT
-    getRecommendNfts()
+    getRecommandedNfts()
       .then((data) => setRecommendNfts(data))
       .catch((error) =>
         console.error("Error fetching recommended NFTs:", error)
       );
 
     // 获取热门NFT
-    getHotNfts()
+    getNotableNfts()
       .then((data) => setHotNfts(data))
       .catch((error) => console.error("Error fetching hot NFTs:", error));
   }, []);
