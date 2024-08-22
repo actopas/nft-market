@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 15:45:56
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-19 15:14:55
+ * @LastEditTime: 2024-08-22 23:24:28
  */
 "use client";
 
@@ -68,11 +68,6 @@ const Header: React.FC = () => {
   const handleTo = (path: string) => {
     router.push(path);
   };
-  useEffect(() => {
-    fetch("/api/data")
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  }, []);
   useEffect(() => {
     setIsMounted(true);
   }, []);

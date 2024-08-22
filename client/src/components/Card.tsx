@@ -4,7 +4,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 23:01:29
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-18 23:58:20
+ * @LastEditTime: 2024-08-22 23:22:36
  */
 import React from "react";
 import Image from "next/image";
@@ -14,33 +14,40 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Avatar, Card } from "antd";
-
+import { Nft } from "@/api/nfts/nft.d";
+import { useRouter } from "next/navigation";
 const { Meta } = Card;
-type Item = {
-  title: string;
-  desc: string;
-};
+
 type CardProps = {
-  item: Item;
+  item: Nft;
   key: number;
 };
-const App: React.FC<CardProps> = ({ item }) => (
-  <Card
-    style={{ width: 300 }}
-    className="mb-8 w-[300px] min-w-[300px]"
-    cover={<Image alt="example" src="" width={300} height={200} />}
-    actions={[
-      <SettingOutlined key="setting" />,
-      <EditOutlined key="edit" />,
-      <EllipsisOutlined key="ellipsis" />,
-    ]}
-  >
-    <Meta
-      avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-      title={item.title}
-      description={item.desc}
-    />
-  </Card>
-);
+const App: React.FC<CardProps> = ({ item }) => {
+  const router = useRouter();
+
+  return (
+    <Card
+      style={{ width: 300 }}
+      className="mb-8 w-[300px] min-w-[300px]"
+      cover={<Image alt="example" src="" width={300} height={200} />}
+      onClick={() => router.push(`/detail/${item._id}`)}
+      actions={
+        [
+          // <SettingOutlined key="setting" />,
+          // <EditOutlined key="edit" />,
+          // <EllipsisOutlined key="ellipsis" />,
+        ]
+      }
+    >
+      <Meta
+        avatar={
+          <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
+        }
+        title={item.name}
+        description={item.description}
+      />
+    </Card>
+  );
+};
 
 export default App;

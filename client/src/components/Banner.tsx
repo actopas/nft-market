@@ -1,36 +1,26 @@
 "use client";
-
 import React from "react";
 import { Carousel } from "antd";
 
-const contentStyle: React.CSSProperties = {
-  margin: 0,
-  height: "500px",
-  color: "#fff",
-  lineHeight: "500px",
-  textAlign: "center",
-  background: "#364d79",
-};
+interface BannerProps {
+  banners: string[]; // 接受一个字符串数组作为 props
+}
 
-const Banner: React.FC = () => {
+const Banner: React.FC<BannerProps> = ({ banners }) => {
   const onChange = (currentSlide: number) => {
     console.log(currentSlide);
   };
 
   return (
     <Carousel afterChange={onChange} autoplay>
-      <div>
-        <h3 style={contentStyle}>1</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>2</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>3</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>4</h3>
-      </div>
+      {banners.map((banner, index) => (
+        <div key={index}>
+          <h3
+            className="m-0 h-[500px] text-white leading-[500px] text-center bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${banner})` }}
+          ></h3>
+        </div>
+      ))}
     </Carousel>
   );
 };

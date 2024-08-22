@@ -1,5 +1,5 @@
 export interface Nft {
-  id?: string;
+  _id?: string;
   name: string;
   imageUrl?: string;
   artist: string;

@@ -1,19 +1,21 @@
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-18 23:31:46
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-22 15:17:35
+ */
 "use client";
 import React, { useRef } from "react";
 import dynamic from "next/dynamic";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-
+import { Nft } from "@/api/nfts/nft.d";
 const Card = dynamic(() => import("@/components/Card"), { ssr: false });
-
-type Item = {
-  title: string;
-  desc: string;
-};
 
 type ItemListProps = {
   title: string;
-  itemList: Item[];
+  itemList: Nft[];
 };
 
 const ItemList: React.FC<ItemListProps> = ({ title, itemList }) => {
