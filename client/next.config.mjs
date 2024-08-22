@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 02:01:26
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 00:20:12
+ * @LastEditTime: 2024-08-23 02:54:35
  */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,6 +14,7 @@ const nextConfig = {
       "www.cnet.com",
       "i.insider.com",
       "encrypted-tbn0.gstatic.com",
+      "localhost",
     ],
   },
 };

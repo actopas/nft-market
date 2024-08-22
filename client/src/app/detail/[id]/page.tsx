@@ -1,3 +1,10 @@
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-22 22:42:09
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-23 03:09:54
+ */
 // app/detail/[id]/page.tsx
 "use client";
 import Image from "next/image";
@@ -48,9 +55,11 @@ export default function NFTDetailPage() {
             ]}
           >
             <Card.Meta
-              title={nft.name}
+              title={<span className="text-white">{nft.name}</span>} // 修改标题颜色
               description={
-                <>
+                <div className="text-white">
+                  {" "}
+                  {/* 修改描述部分的颜色 */}
                   <p>Artist: {nft.artist}</p>
                   <p>Price: {nft.price}</p>
                   <p>{nft.description}</p>
@@ -60,7 +69,7 @@ export default function NFTDetailPage() {
                       <p>Attributes: {nft.properties.attributes.join(", ")}</p>
                     </>
                   )}
-                </>
+                </div>
               }
             />
           </Card>

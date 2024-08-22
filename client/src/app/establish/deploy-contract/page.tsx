@@ -3,24 +3,29 @@ import React, { useState } from "react";
 import { Upload, Button, Form, Input, Card, Col, Row, message } from "antd";
 import { UploadOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { createNft } from "@/api/index";
+
 const { TextArea } = Input;
 
 const CreateContractPage: React.FC = () => {
   const [selectedBlockchain, setSelectedBlockchain] = useState<string>("");
+  const [imgUrl, setImgUrl] = useState<string>("");
 
-  async function submitCreateNftRequest() {
+  // 表单提交处理函数
+  const submitCreateNftRequest = async (values: any) => {
     try {
       // 构建新的 NFT 数据
       const newNft = {
-        name: "Example NFT",
-        artist: "Artist Name",
-        price: "10",
-        owner: "0xOwnerAddressHere",
-        imageUrl: "https://example.com/image.png",
-        description: "This is an example NFT.",
+        name: values.contractName,
+        symbol: values.symbol,
+        artist: values.artist,
+        price: values.price,
+        owner: "0xOwnerAddressHere", // 可以从钱包地址获取
+        imageUrl: imgUrl, // 使用上传后的图片URL
+        description: values.description,
+        blockchain: selectedBlockchain,
         properties: {
           rarity: "Rare",
-          attributes: ["Attribute1", "Attribute2"],
+          attributes: ["Attribute1", "Attribute2"], // 根据需要设置属性
         },
         onSale: true,
       };
@@ -28,12 +33,15 @@ const CreateContractPage: React.FC = () => {
       // 向后端发送创建 NFT 的请求
       const createdNft = await createNft(newNft);
       console.log("NFT created successfully:", createdNft);
+      message.success("NFT 创建成功");
 
       // 处理后续逻辑，例如通知用户或更新界面
     } catch (error) {
       console.error("Error creating NFT:", error);
+      message.error("创建 NFT 时出错");
     }
-  }
+  };
+
   return (
     <div className="bg-black min-h-screen text-white p-6">
       <div className="flex items-center mb-6">
@@ -62,20 +70,20 @@ const CreateContractPage: React.FC = () => {
           <Form
             layout="vertical"
             className="bg-black text-white"
-            onFinish={submitCreateNftRequest}
+            onFinish={submitCreateNftRequest} // 提交表单时调用
           >
             <Form.Item
               label={<span className="text-white">Cover Image</span>}
               required
             >
               <Upload.Dragger
-                name="coverImage"
-                action="/uploadCoverImage" // 后端API用于处理图片上传
+                name="file"
+                action="http://localhost:3001/upload/uploadNft" // 后端API用于处理图片上传
                 className="bg-black text-white"
                 onChange={(info) => {
                   if (info.file.status === "done") {
-                    console.log("File uploaded:", info.file.response);
-                    // 处理上传后的响应，例如将图片URL存储到表单中
+                    console.log("File uploaded:", info.file.response.url);
+                    setImgUrl(info.file.response.url);
                   }
                 }}
               >
@@ -199,7 +207,7 @@ const CreateContractPage: React.FC = () => {
                 type="primary"
                 htmlType="submit"
                 className="w-full h-12"
-                disabled={!selectedBlockchain}
+                disabled={!selectedBlockchain || !imgUrl} // 确保选择了区块链和上传了图片
               >
                 Continue
               </Button>

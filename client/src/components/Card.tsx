@@ -4,7 +4,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 23:01:29
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-22 23:22:36
+ * @LastEditTime: 2024-08-23 02:56:18
  */
 import React from "react";
 import Image from "next/image";
@@ -29,7 +29,14 @@ const App: React.FC<CardProps> = ({ item }) => {
     <Card
       style={{ width: 300 }}
       className="mb-8 w-[300px] min-w-[300px]"
-      cover={<Image alt="example" src="" width={300} height={200} />}
+      cover={
+        <Image
+          alt="example"
+          src={item.imageUrl || ""}
+          width={300}
+          height={200}
+        />
+      }
       onClick={() => router.push(`/detail/${item._id}`)}
       actions={
         [

@@ -1,3 +1,10 @@
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-19 15:13:58
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-23 03:14:13
+ */
 "use client";
 import React, { ReactNode } from "react";
 import { Layout, Avatar, Button, Dropdown, Menu } from "antd";
@@ -56,14 +63,6 @@ const AccountLayout: React.FC<{ children: React.ReactNode }> = ({
             </li>
             <li>
               <Link
-                href="/account/offers"
-                className="text-white hover:underline"
-              >
-                Offers Made
-              </Link>
-            </li>
-            <li>
-              <Link
                 href="/account/deals"
                 className="text-white hover:underline"
               >
@@ -76,16 +75,6 @@ const AccountLayout: React.FC<{ children: React.ReactNode }> = ({
                 className="text-white hover:underline"
               >
                 Created
-              </Link>
-            </li>
-            <li>
-              <Link href="/activity" className="text-white hover:underline">
-                Activity
-              </Link>
-            </li>
-            <li>
-              <Link href="/more" className="text-white hover:underline">
-                More
               </Link>
             </li>
           </ul>
