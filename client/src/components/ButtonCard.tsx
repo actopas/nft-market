@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-19 01:04:16
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-19 18:02:27
+ * @LastEditTime: 2024-08-23 13:30:38
  */
 "use client";
 import React from "react";
@@ -22,7 +22,7 @@ const ButtonCard: React.FC<ItemProps> = ({ item }) => {
   return (
     <Card
       hoverable
-      className="mt-[30px] text-white"
+      className=" text-white"
       title={<span className="text-white">{item.title}</span>}
       bordered={false}
       style={{

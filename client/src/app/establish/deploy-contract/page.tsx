@@ -1,15 +1,26 @@
 "use client";
 import React, { useState } from "react";
-import { Upload, Button, Form, Input, Card, Col, Row, message } from "antd";
+import {
+  Upload,
+  Button,
+  Form,
+  Input,
+  Card,
+  Switch,
+  Col,
+  Row,
+  message,
+} from "antd";
 import { UploadOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { createNft } from "@/api/index";
-
+import ProtectedButton from "@/components/ProtectedButton";
+import { useAuth } from "@/context/AuthContext";
 const { TextArea } = Input;
 
 const CreateContractPage: React.FC = () => {
   const [selectedBlockchain, setSelectedBlockchain] = useState<string>("");
   const [imgUrl, setImgUrl] = useState<string>("");
-
+  const { userInfo } = useAuth();
   // 表单提交处理函数
   const submitCreateNftRequest = async (values: any) => {
     try {
@@ -19,7 +30,7 @@ const CreateContractPage: React.FC = () => {
         symbol: values.symbol,
         artist: values.artist,
         price: values.price,
-        owner: "0xOwnerAddressHere", // 可以从钱包地址获取
+        owner: userInfo.address, // 可以从钱包地址获取
         imageUrl: imgUrl, // 使用上传后的图片URL
         description: values.description,
         blockchain: selectedBlockchain,
@@ -27,7 +38,9 @@ const CreateContractPage: React.FC = () => {
           rarity: "Rare",
           attributes: ["Attribute1", "Attribute2"], // 根据需要设置属性
         },
-        onSale: true,
+        onSale: false,
+        recommanded: values.recommanded,
+        notable: values.notable,
       };
 
       // 向后端发送创建 NFT 的请求
@@ -68,6 +81,7 @@ const CreateContractPage: React.FC = () => {
       <Row gutter={24}>
         <Col span={16}>
           <Form
+            initialValues={{ recommanded: false, notable: false }}
             layout="vertical"
             className="bg-black text-white"
             onFinish={submitCreateNftRequest} // 提交表单时调用
@@ -134,7 +148,7 @@ const CreateContractPage: React.FC = () => {
 
             {/* 新增字段：价格 */}
             <Form.Item
-              label={<span className="text-white">Price (in ETH)</span>}
+              label={<span className="text-white">Price (in GETH)</span>}
               name="price"
               rules={[{ required: true, message: "Please enter the price" }]}
             >
@@ -168,25 +182,15 @@ const CreateContractPage: React.FC = () => {
                 <Col span={8}>
                   <Card
                     className={`bg-gray-800 text-white border-2 ${
-                      selectedBlockchain === "Ethereum" ? "border-blue-500" : ""
+                      selectedBlockchain === "GanacheEth"
+                        ? "border-blue-500"
+                        : ""
                     }`}
                     bordered={false}
-                    onClick={() => setSelectedBlockchain("Ethereum")}
+                    onClick={() => setSelectedBlockchain("GanacheEth")}
                   >
-                    <h3>Ethereum</h3>
-                    <p className="text-gray-400">Estimated cost: US$0.96</p>
-                  </Card>
-                </Col>
-                <Col span={8}>
-                  <Card
-                    className={`bg-gray-800 text-white  border-2 ${
-                      selectedBlockchain === "Base" ? "border-blue-500" : ""
-                    }`}
-                    bordered={false}
-                    onClick={() => setSelectedBlockchain("Base")}
-                  >
-                    <h3>Base</h3>
-                    <p className="text-gray-400">Lower cost</p>
+                    <h3>GanacheEth</h3>
+                    <p className="text-gray-400">Estimated cost: ***</p>
                   </Card>
                 </Col>
                 <Col span={8}>
@@ -196,21 +200,35 @@ const CreateContractPage: React.FC = () => {
                     onClick={() => setSelectedBlockchain("More Options")}
                   >
                     <h3>More Options</h3>
-                    <p className="text-gray-400">View more options</p>
+                    <p className="text-gray-400">Coming soon...</p>
                   </Card>
                 </Col>
               </Row>
             </Form.Item>
-
+            <Form.Item
+              label={<span className="text-white">Recommanded</span>}
+              name="recommanded"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item
+              label={<span className="text-white">Notable</span>}
+              name="notable"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
             <Form.Item>
-              <Button
+              <ProtectedButton
                 type="primary"
                 htmlType="submit"
-                className="w-full h-12"
+                className="w-full h-12 "
+                style={{ color: "white" }}
                 disabled={!selectedBlockchain || !imgUrl} // 确保选择了区块链和上传了图片
               >
                 Continue
-              </Button>
+              </ProtectedButton>
             </Form.Item>
           </Form>
         </Col>

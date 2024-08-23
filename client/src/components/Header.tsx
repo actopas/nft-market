@@ -1,62 +1,25 @@
-/*
- * @Describle:
- * @Author: actopas <fishmooger@gmail.com>
- * @Date: 2024-08-18 15:45:56
- * @LastEditors: actopas
- * @LastEditTime: 2024-08-22 23:24:28
- */
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Button, Dropdown, notification, MenuProps } from "antd";
+import { useAuth } from "@/context/AuthContext"; // 确保路径正确
+import { useAuthGuard } from "@/hooks/useAuthGuard"; // 确保路径正确
+import { shortenAddress } from "@/utils";
 
-import { Button, Dropdown, notification } from "antd";
-import Web3 from "web3";
-
-type NotificationType = "success" | "info" | "warning" | "error";
+interface Props {
+  account: string;
+  items: MenuProps["items"];
+}
 
 const Header: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const router = useRouter();
-  const [account, setAccount] = useState<string>("");
+  const { account, connectWallet, disconnectAccount } = useAuth();
+  const { isAuthenticated } = useAuthGuard();
   const [api, contextHolder] = notification.useNotification();
-  const linkMetaMask = async () => {
-    // 检查 MetaMask 是否已安装
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      try {
-        // 请求用户连接 MetaMask
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const account = accounts[0];
-        // 保存地址并更新UI
-        setAccount(account);
-        localStorage.setItem("userAddress", account);
-      } catch (error) {
-        openNotification("error", "User denied account access", error);
-        console.error(error, "User denied account access");
-      }
-    } else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
-    } else {
-      console.log(
-        "Non-Ethereum browser detected. You should consider trying MetaMask!"
-      );
-    }
-  };
-  const shortenAddress = (address: any, length = 4) => {
-    if (!address) return "";
-    const start = address.substring(0, length + 2); // 加2是因为包括 "0x"
-    const end = address.substring(address.length - length);
-    return `${start}...${end}`;
-  };
-  const disconnectAccount = () => {
-    setAccount("");
-    localStorage.removeItem("userAccount");
-  };
+  const router = useRouter();
+
   const openNotification = (
-    type: NotificationType,
+    type: "success" | "info" | "warning" | "error",
     message: string,
     description: any
   ) => {
@@ -65,51 +28,66 @@ const Header: React.FC = () => {
       description,
     });
   };
-  const handleTo = (path: string) => {
+
+  const handleNavigation = (path: string) => {
     router.push(path);
   };
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
-  if (!isMounted) {
-    return null; // 或者显示一个加载指示器，防止在未挂载时渲染
-  }
+  // 如果当前路由是 /account，则禁用 Dropdown
+
+  const handleConnect = async () => {
+    try {
+      await connectWallet();
+    } catch (error) {
+      openNotification("error", "Connection Failed", error.message);
+    }
+  };
+  const items: MenuProps["items"] = [
+    {
+      key: "profile",
+      label: "Profile",
+      onClick: () => handleNavigation("/account"),
+    },
+    {
+      key: "disconnect",
+      label: "Disconnect",
+      onClick: disconnectAccount,
+    },
+  ];
+  const AccountDropdown = ({ account, items }: Props) => {
+    const pathname = usePathname();
+    const isAccountPage = pathname === "/account";
+
+    return isAccountPage ? (
+      <Button>{shortenAddress(account || "")}</Button>
+    ) : (
+      <Dropdown menu={{ items }} placement="bottom" arrow>
+        <Button>{shortenAddress(account || "")}</Button>
+      </Dropdown>
+    );
+  };
   return (
-    <div>
-      <div className="h-14 flex justify-between items-center pl-4 pr-4">
-        {contextHolder}
-        <div className="w-1/3 flex justify-around">
-          <span className="cursor-pointer" onClick={() => handleTo("/")}>
-            Home
-          </span>
-          <span
-            className="cursor-pointer"
-            onClick={() => handleTo("/establish")}
-          >
-            Establish
-          </span>
-          <span className="cursor-pointer" onClick={() => handleTo("/account")}>
-            Account
-          </span>
-        </div>
-        {!account ? (
-          <Button className="" onClick={linkMetaMask}>
-            Connect Wallet
-          </Button>
-        ) : (
-          <div>
-            <span>Connect as </span>
-            <Dropdown
-              overlay={<Button onClick={disconnectAccount}>Disconnect</Button>}
-              placement="bottom"
-              arrow
-            >
-              <Button>{shortenAddress(account)}</Button>
-            </Dropdown>
-          </div>
-        )}
+    <div className="h-14 flex justify-between items-center pl-4 pr-4">
+      {contextHolder}
+      <div className="w-1/3 flex justify-around">
+        <span className="cursor-pointer" onClick={() => handleNavigation("/")}>
+          Home
+        </span>
+        <span
+          className="cursor-pointer"
+          onClick={() => handleNavigation("/establish")}
+        >
+          Establish
+        </span>
       </div>
+      {!isAuthenticated ? (
+        <Button onClick={handleConnect}>Connect Wallet</Button>
+      ) : (
+        <div>
+          <span>Connected as </span>
+          <AccountDropdown account={account || ""} items={items} />
+        </div>
+      )}
     </div>
   );
 };

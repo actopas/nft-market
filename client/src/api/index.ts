@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-20 01:06:06
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-22 19:15:30
+ * @LastEditTime: 2024-08-23 16:10:12
  */
 import axios from "axios";
 
@@ -16,3 +16,4 @@ export const apiClient = axios.create({
 });
 export * from "./nfts/nft";
 export * from "./banners/banner";
+export * from "./users/user";

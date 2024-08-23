@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-22 22:42:09
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 03:09:54
+ * @LastEditTime: 2024-08-23 13:21:54
  */
 // app/detail/[id]/page.tsx
 "use client";
@@ -13,6 +13,7 @@ import { Button, Card } from "antd";
 import { useParams } from "next/navigation";
 import { findNftById } from "@/api/index";
 import { Nft } from "@/api/nfts/nft.d";
+import ProtectedButton from "@/components/ProtectedButton";
 export default function NFTDetailPage() {
   const [nft, setNft] = useState<Nft>();
   const params = useParams();
@@ -49,9 +50,9 @@ export default function NFTDetailPage() {
           <Card
             className="bg-gray-800 border-gray-700"
             actions={[
-              <Button key="offer" type="primary">
+              <ProtectedButton key="offer" type="primary">
                 Make offer
-              </Button>,
+              </ProtectedButton>,
             ]}
           >
             <Card.Meta

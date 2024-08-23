@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-18 02:11:23
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-22 01:02:45
+ * @LastEditTime: 2024-08-23 13:30:59
  */
 
 import React from "react";
@@ -26,7 +26,7 @@ const creatList = [
 ];
 const Create: React.FC = () => {
   return (
-    <div className="w-full mt-[100px] flex flex-col justify-center items-center">
+    <div className="w-full h-2/3 mt-[100px] flex flex-col justify-center items-center">
       {creatList.map((item, index) => {
         return <ButtonCard key={index} item={item} />;
       })}

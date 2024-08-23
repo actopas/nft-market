@@ -3,17 +3,14 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-19 15:13:58
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 03:14:13
+ * @LastEditTime: 2024-08-23 22:34:30
  */
 "use client";
 import React, { ReactNode } from "react";
 import { Layout, Avatar, Button, Dropdown, Menu } from "antd";
-import {
-  EditOutlined,
-  MoreOutlined,
-  ShareAltOutlined,
-} from "@ant-design/icons";
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { shortenAddress } from "@/utils";
 
 const { Header, Content } = Layout;
 
@@ -27,28 +24,21 @@ const menu = (
 const AccountLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { userInfo } = useAuth();
+  console.log(userInfo, "userInfo");
   return (
     <Layout className="bg-black min-h-screen text-white">
-      <Header className="bg-black p-4 flex items-center h-[300px]">
-        <Avatar size={80} src="" />
+      <Header className="bg-black p-4 flex items-center h-[200px]">
+        <Avatar
+          size={64}
+          src="https://api.dicebear.com/7.x/miniavs/svg?seed=8"
+        />
         <div className="ml-4">
-          <h2 className="text-xl text-white">Unnamed</h2>
-          <p className="text-sm text-gray-400">
-            0xD13f...9e67 · Joined August 2024
-          </p>
+          <h2 className="text-xl text-white">
+            {shortenAddress(userInfo.address || "")}
+          </h2>
+          <p className="text-sm text-gray-400">More Info Coming Soon...</p>
         </div>
-        <Button
-          icon={<ShareAltOutlined />}
-          className="ml-auto bg-gray-800 border-none text-white hover:bg-gray-600"
-        >
-          Share
-        </Button>
-        <Dropdown overlay={menu} trigger={["click"]} className="ml-2">
-          <Button
-            icon={<MoreOutlined />}
-            className="bg-gray-800 border-none text-white hover:bg-gray-600"
-          />
-        </Dropdown>
       </Header>
       <Content className="p-6 bg-black text-white">
         <nav className="mb-6">

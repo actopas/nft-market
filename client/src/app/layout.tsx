@@ -1,7 +1,16 @@
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-18 02:01:26
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-23 13:12:06
+ */
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -19,3 +19,8 @@ export interface Nft {
     previousOwner: string;
   }>;
 }
+export interface NftSummary {
+  _id?: string;
+  name: string;
+  description?: string;
+}
