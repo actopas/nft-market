@@ -3,18 +3,30 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-23 22:27:46
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 22:31:31
+ * @LastEditTime: 2024-08-25 01:34:54
+ */
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-23 22:27:46
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-24 17:41:29
  */
 import React from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Tag } from "antd";
 import { NftSummary } from "@/api/nfts/nft.d";
-
+import { NftStatus } from "@/api/nfts/nft.d";
 interface NftTableProps {
+  scene: string;
   nfts: NftSummary[];
-  handleSoldOut: (id: string) => void;
+  handleUpdateSaleStatus: (status: NftStatus, id: string) => void;
 }
 
-const NftTable: React.FC<NftTableProps> = ({ nfts, handleSoldOut }) => {
+const NftTable: React.FC<NftTableProps> = ({
+  scene,
+  nfts,
+  handleUpdateSaleStatus,
+}) => {
   const columns = [
     {
       title: "NFT", // NFT 列
@@ -22,26 +34,89 @@ const NftTable: React.FC<NftTableProps> = ({ nfts, handleSoldOut }) => {
       key: "name",
       render: (text: string) => <span>{text}</span>,
     },
+    ...(scene === "deal"
+      ? [
+          {
+            title: "ID", // NFT 列
+            dataIndex: "id",
+            key: "id",
+            render: (text: string) => <span>{text}</span>,
+          },
+        ]
+      : []),
     {
       title: "Description", // Description 列
       dataIndex: "description",
       key: "description",
       render: (text: string) => <span>{text}</span>,
     },
-    {
-      title: "Operation", // Operation 列
-      key: "operation",
-      render: (_: any, record: NftSummary) => (
-        <Button
-          type="primary"
-          danger
-          className="text-white border-white bg-transparent hover:bg-white hover:text-black"
-          onClick={() => handleSoldOut(record._id || "")}
-        >
-          Sold Out
-        </Button>
-      ),
-    },
+    ...(scene !== "deal"
+      ? [
+          {
+            title: "Status", // NFT 列
+            dataIndex: "status",
+            key: "status",
+            render: (text: number) => {
+              let color = "";
+              let statusText = "";
+              switch (text) {
+                case NftStatus.Hold:
+                  color = "green";
+                  statusText = "Hold";
+                  break;
+                case NftStatus.OnSale:
+                  color = "red";
+                  statusText = "On Sale";
+                  break;
+                case NftStatus.Sold:
+                  color = "gray";
+                  statusText = "Sold";
+                  break;
+                default:
+                  color = "default";
+                  statusText = "Unknown";
+              }
+              return <Tag color={color}>{statusText}</Tag>;
+            },
+          },
+        ]
+      : []),
+    ...(scene === "collected"
+      ? [
+          {
+            title: "Operation",
+            key: "operation",
+            render: (_: any, record: NftSummary) => {
+              if (record.status === 1) {
+                return (
+                  <Button
+                    type="primary"
+                    danger
+                    className="text-white border-white bg-transparent hover:bg-white hover:text-black"
+                    onClick={() =>
+                      handleUpdateSaleStatus(NftStatus.Hold, record.id || "")
+                    }
+                  >
+                    Off shelf
+                  </Button>
+                );
+              } else {
+                // 其他情况下，显示 "Sale" 按钮
+                return (
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      handleUpdateSaleStatus(NftStatus.OnSale, record.id || "")
+                    } // 调用 handleUpdateSaleStatus 方法
+                  >
+                    Sale
+                  </Button>
+                );
+              }
+            },
+          },
+        ]
+      : []),
   ];
 
   return (

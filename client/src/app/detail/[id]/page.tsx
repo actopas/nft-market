@@ -3,20 +3,39 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-22 22:42:09
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 13:21:54
+ * @LastEditTime: 2024-08-25 02:00:19
  */
 // app/detail/[id]/page.tsx
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { Button, Card } from "antd";
+import { Card, notification } from "antd";
 import { useParams } from "next/navigation";
-import { findNftById } from "@/api/index";
+import { findNftById, makeNftOffer } from "@/api/index";
 import { Nft } from "@/api/nfts/nft.d";
 import ProtectedButton from "@/components/ProtectedButton";
+import { useAuth } from "@/context/AuthContext";
 export default function NFTDetailPage() {
   const [nft, setNft] = useState<Nft>();
+  const [api, contextHolder] = notification.useNotification();
+  const { account } = useAuth();
   const params = useParams();
+
+  const handleMakeOffer = async () => {
+    const nftId = nft!._id || "";
+    const sellerAddress = nft!.owner; // 假设 NFT 对象中有 owner 属性
+    const price = nft!.price; // 可以从输入框或其他地方获取价格
+    const buyerAddress = account || "";
+
+    await makeNftOffer(nftId, sellerAddress, price, buyerAddress);
+    api.success({
+      message: "transaction successfully",
+      description: "Please back to home",
+    });
+  };
+  const isOwner = () => {
+    return nft!.owner === account;
+  };
   useEffect(() => {
     if (params.id) {
       const fetchNftById = async () => {
@@ -34,6 +53,7 @@ export default function NFTDetailPage() {
   if (!nft) return <p>Loading...</p>;
   return (
     <div className="flex justify-center items-center h-screen bg-black text-white">
+      {contextHolder}
       <div className="flex w-4/5 max-w-7xl">
         {/* Image container */}
         <div className="w-1/2 p-4">
@@ -50,7 +70,12 @@ export default function NFTDetailPage() {
           <Card
             className="bg-gray-800 border-gray-700"
             actions={[
-              <ProtectedButton key="offer" type="primary">
+              <ProtectedButton
+                key="offer"
+                type="primary"
+                onClick={handleMakeOffer}
+                disabled={isOwner()}
+              >
                 Make offer
               </ProtectedButton>,
             ]}

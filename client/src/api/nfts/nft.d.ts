@@ -1,3 +1,9 @@
+export enum NftStatus {
+  Hold = 0,
+  OnSale = 1,
+  Sold = 2,
+}
+
 export interface Nft {
   _id?: string;
   name: string;
@@ -9,7 +15,7 @@ export interface Nft {
     rarity: string;
     attributes: string[];
   };
-  onSale?: boolean;
+  status: NftStatus;
   owner: string;
   recommanded?: boolean;
   notable?: boolean;
@@ -20,7 +26,8 @@ export interface Nft {
   }>;
 }
 export interface NftSummary {
-  _id?: string;
+  id?: string;
   name: string;
   description?: string;
+  status: NftStatus;
 }

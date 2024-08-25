@@ -23,6 +23,7 @@ const CreateContractPage: React.FC = () => {
   const { userInfo } = useAuth();
   // 表单提交处理函数
   const submitCreateNftRequest = async (values: any) => {
+    console.log(userInfo, "user");
     try {
       // 构建新的 NFT 数据
       const newNft = {
@@ -38,7 +39,7 @@ const CreateContractPage: React.FC = () => {
           rarity: "Rare",
           attributes: ["Attribute1", "Attribute2"], // 根据需要设置属性
         },
-        onSale: false,
+        status: 0,
         recommanded: values.recommanded,
         notable: values.notable,
       };

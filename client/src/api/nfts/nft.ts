@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-21 20:00:37
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 22:19:25
+ * @LastEditTime: 2024-08-25 00:55:06
  */
 import { Nft, NftSummary } from "./nft.d";
 import { apiClient } from "../index";
@@ -89,5 +89,27 @@ export const getNotableNfts = async (): Promise<Nft[]> => {
   } catch (error) {
     console.error("Error fetching notable NFTs:", error);
     throw error;
+  }
+};
+
+export const makeNftOffer = async (
+  nftId: string,
+  sellerAddress: string,
+  price: string,
+  buyerAddress: string
+) => {
+  try {
+    const response = await apiClient.post("/nfts/makeNftOffer", {
+      buyerAddress,
+      sellerAddress,
+      nftId,
+      price,
+    });
+
+    if (response.status === 200) {
+      console.log("Offer made successfully:", response.data);
+    }
+  } catch (error) {
+    console.error("Failed to make offer:", error);
   }
 };

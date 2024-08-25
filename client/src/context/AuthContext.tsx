@@ -18,6 +18,7 @@ interface AuthContextProps {
   disconnectAccount: () => void;
   isConnected: boolean;
   web3: Web3 | null;
+  refreshUserInfo: () => Promise<void>; // 公开刷新方法
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -41,6 +42,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const refreshUserInfo = async () => {
+    if (account) {
+      await fetchUserInfo(account);
+    }
+  };
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -54,11 +61,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           setIsConnected(true);
           localStorage.setItem("userAddress", account);
 
-          // 仅在没有用户信息时才获取
-          if (!userInfo) {
-            await fetchUserInfo(account);
-          }
+          // 获取用户信息
+          await fetchUserInfo(account);
 
+          // 显示通知（如需要）
           // api.success({
           //   message: "Wallet Connected",
           //   description: `Connected to ${account}`,
@@ -93,35 +99,44 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", (accounts: string[]) => {
-        if (accounts.length > 0) {
-          const account = accounts[0];
-          setAccount(account);
-          setIsConnected(true);
-          localStorage.setItem("userAddress", account);
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length > 0) {
+        const account = accounts[0];
+        setAccount(account);
+        setIsConnected(true);
+        localStorage.setItem("userAddress", account);
 
-          // 获取用户信息
-          fetchUserInfo(account);
-        } else {
-          disconnectAccount();
-        }
-      });
+        // 获取用户信息
+        fetchUserInfo(account);
+      } else {
+        disconnectAccount();
+      }
+    };
+
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", handleAccountsChanged);
     }
 
     const storedAccount = localStorage.getItem("userAddress");
     if (storedAccount) {
-      setAccount(storedAccount);
-      setIsConnected(true);
       const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
+      setAccount(storedAccount);
+      setIsConnected(true);
 
-      // 仅在没有用户信息时才获取
-      if (!userInfo) {
-        fetchUserInfo(storedAccount);
-      }
+      // 获取用户信息
+      fetchUserInfo(storedAccount);
     }
-  }, [userInfo]);
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener(
+          "accountsChanged",
+          handleAccountsChanged
+        );
+      }
+    };
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -132,6 +147,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         disconnectAccount,
         isConnected,
         web3,
+        refreshUserInfo, // 暴露刷新方法
       }}
     >
       {contextHolder} {/* 用于显示通知 */}

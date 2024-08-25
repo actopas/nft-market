@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-19 15:13:58
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-23 22:34:30
+ * @LastEditTime: 2024-08-24 22:16:18
  */
 "use client";
 import React, { ReactNode } from "react";
@@ -24,8 +24,7 @@ const menu = (
 const AccountLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { userInfo } = useAuth();
-  console.log(userInfo, "userInfo");
+  const { account } = useAuth();
   return (
     <Layout className="bg-black min-h-screen text-white">
       <Header className="bg-black p-4 flex items-center h-[200px]">
@@ -35,7 +34,7 @@ const AccountLayout: React.FC<{ children: React.ReactNode }> = ({
         />
         <div className="ml-4">
           <h2 className="text-xl text-white">
-            {shortenAddress(userInfo.address || "")}
+            {shortenAddress(account || "")}
           </h2>
           <p className="text-sm text-gray-400">More Info Coming Soon...</p>
         </div>
