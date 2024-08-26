@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-21 20:00:37
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-26 19:53:34
+ * @LastEditTime: 2024-08-27 05:38:56
  */
 import { Nft, NftSummary } from "./nft.d";
 import { apiClient } from "../index";

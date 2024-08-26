@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-22 22:42:09
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-26 19:25:37
+ * @LastEditTime: 2024-08-27 06:23:57
  */
 // app/detail/[id]/page.tsx
 "use client";
@@ -15,10 +15,14 @@ import { findNftById, purchaseNft } from "@/api/index";
 import { Nft } from "@/api/nfts/nft.d";
 import ProtectedButton from "@/components/ProtectedButton";
 import { useAuth } from "@/context/AuthContext";
+import NftMarketPlace from "@/contract/NFTMarketplace.json";
+import SimpleNFT from "@/contract/SimpleNFT.json";
+import { Contract } from "web3";
+
 export default function NFTDetailPage() {
   const [nft, setNft] = useState<Nft>();
   const [api, contextHolder] = notification.useNotification();
-  const { account } = useAuth();
+  const { account, web3 } = useAuth();
   const params = useParams();
 
   const handlePurchase = async () => {
@@ -26,7 +30,37 @@ export default function NFTDetailPage() {
     const sellerAddress = nft!.owner; // 假设 NFT 对象中有 owner 属性
     const price = nft!.price; // 可以从输入框或其他地方获取价格
     const buyerAddress = account || "";
-
+    const marketContractAddress =
+      process.env.NEXT_PUBLIC_MARKET_CONTRACT_ADDRESS;
+    const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;
+    const priceInWei = web3.utils.toWei(price, "ether");
+    const marketContract = new web3.eth.Contract(
+      NftMarketPlace.abi,
+      marketContractAddress
+    );
+    const nftContract = new web3.eth.Contract(
+      SimpleNFT.abi,
+      nftContractAddress
+    );
+    console.log(
+      "check",
+      nftContract,
+      nftContractAddress,
+      nft.tokenId,
+      sellerAddress,
+      priceInWei
+    );
+    const currentOwner = await nftContract.methods.ownerOf(nft.tokenId).call();
+    console.log(currentOwner, sellerAddress);
+    if (!(currentOwner == sellerAddress)) {
+      throw new Error("Seller does not own the NFT");
+    }
+    const transaction = await marketContract.methods
+      .buyNFT(nftContractAddress, nft.tokenId, sellerAddress, priceInWei)
+      .send({
+        from: account,
+        value: priceInWei,
+      });
     await purchaseNft(nftId, sellerAddress, price, buyerAddress);
     api.success({
       message: "transaction successfully",
@@ -76,7 +110,7 @@ export default function NFTDetailPage() {
                 onClick={handlePurchase}
                 disabled={isOwner()}
               >
-                Make offer
+                Purchase
               </ProtectedButton>,
             ]}
           >
