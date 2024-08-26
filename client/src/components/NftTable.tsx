@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-23 22:27:46
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-25 01:34:54
+ * @LastEditTime: 2024-08-26 21:47:00
  */
 /*
  * @Describle:
@@ -19,7 +19,11 @@ import { NftStatus } from "@/api/nfts/nft.d";
 interface NftTableProps {
   scene: string;
   nfts: NftSummary[];
-  handleUpdateSaleStatus: (status: NftStatus, id: string) => void;
+  handleUpdateSaleStatus: (
+    status: NftStatus,
+    id: string,
+    tokenId: string
+  ) => void;
 }
 
 const NftTable: React.FC<NftTableProps> = ({
@@ -94,7 +98,11 @@ const NftTable: React.FC<NftTableProps> = ({
                     danger
                     className="text-white border-white bg-transparent hover:bg-white hover:text-black"
                     onClick={() =>
-                      handleUpdateSaleStatus(NftStatus.Hold, record.id || "")
+                      handleUpdateSaleStatus(
+                        NftStatus.Hold,
+                        record.id || "",
+                        record.tokenId || ""
+                      )
                     }
                   >
                     Off shelf
@@ -106,7 +114,11 @@ const NftTable: React.FC<NftTableProps> = ({
                   <Button
                     type="primary"
                     onClick={() =>
-                      handleUpdateSaleStatus(NftStatus.OnSale, record.id || "")
+                      handleUpdateSaleStatus(
+                        NftStatus.OnSale,
+                        record.id || "",
+                        record.tokenId || ""
+                      )
                     } // 调用 handleUpdateSaleStatus 方法
                   >
                     Sale

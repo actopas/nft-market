@@ -1,3 +1,10 @@
+/*
+ * @Describle:
+ * @Author: actopas <fishmooger@gmail.com>
+ * @Date: 2024-08-22 00:31:42
+ * @LastEditors: actopas
+ * @LastEditTime: 2024-08-26 21:42:54
+ */
 export enum NftStatus {
   Hold = 0,
   OnSale = 1,
@@ -15,6 +22,8 @@ export interface Nft {
     rarity: string;
     attributes: string[];
   };
+  tokenId: string;
+  tokenURI: string;
   status: NftStatus;
   owner: string;
   recommanded?: boolean;
@@ -27,6 +36,7 @@ export interface Nft {
 }
 export interface NftSummary {
   id?: string;
+  tokenId: string;
   name: string;
   description?: string;
   status: NftStatus;

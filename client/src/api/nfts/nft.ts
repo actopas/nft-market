@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-21 20:00:37
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-25 00:55:06
+ * @LastEditTime: 2024-08-26 19:53:34
  */
 import { Nft, NftSummary } from "./nft.d";
 import { apiClient } from "../index";
@@ -92,14 +92,14 @@ export const getNotableNfts = async (): Promise<Nft[]> => {
   }
 };
 
-export const makeNftOffer = async (
+export const purchaseNft = async (
   nftId: string,
   sellerAddress: string,
   price: string,
   buyerAddress: string
 ) => {
   try {
-    const response = await apiClient.post("/nfts/makeNftOffer", {
+    const response = await apiClient.post("/nfts/purchaseNFT", {
       buyerAddress,
       sellerAddress,
       nftId,

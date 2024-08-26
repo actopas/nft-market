@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-22 22:42:09
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-25 02:00:19
+ * @LastEditTime: 2024-08-26 19:25:37
  */
 // app/detail/[id]/page.tsx
 "use client";
@@ -11,7 +11,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Card, notification } from "antd";
 import { useParams } from "next/navigation";
-import { findNftById, makeNftOffer } from "@/api/index";
+import { findNftById, purchaseNft } from "@/api/index";
 import { Nft } from "@/api/nfts/nft.d";
 import ProtectedButton from "@/components/ProtectedButton";
 import { useAuth } from "@/context/AuthContext";
@@ -21,13 +21,13 @@ export default function NFTDetailPage() {
   const { account } = useAuth();
   const params = useParams();
 
-  const handleMakeOffer = async () => {
+  const handlePurchase = async () => {
     const nftId = nft!._id || "";
     const sellerAddress = nft!.owner; // 假设 NFT 对象中有 owner 属性
     const price = nft!.price; // 可以从输入框或其他地方获取价格
     const buyerAddress = account || "";
 
-    await makeNftOffer(nftId, sellerAddress, price, buyerAddress);
+    await purchaseNft(nftId, sellerAddress, price, buyerAddress);
     api.success({
       message: "transaction successfully",
       description: "Please back to home",
@@ -73,7 +73,7 @@ export default function NFTDetailPage() {
               <ProtectedButton
                 key="offer"
                 type="primary"
-                onClick={handleMakeOffer}
+                onClick={handlePurchase}
                 disabled={isOwner()}
               >
                 Make offer

@@ -21,7 +21,9 @@ interface AuthContextProps {
   refreshUserInfo: () => Promise<void>; // 公开刷新方法
 }
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextProps | undefined>(
+  undefined
+);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,

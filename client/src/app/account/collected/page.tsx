@@ -3,36 +3,82 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-19 15:28:19
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-25 01:26:43
+ * @LastEditTime: 2024-08-27 02:11:54
  */
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button, message } from "antd";
+import { message } from "antd";
 import NftTable from "@/components/NftTable";
 import { findNftsByIds, updateNft } from "@/api";
 import { NftSummary } from "@/api/nfts/nft.d";
 import { useAuth } from "@/context/AuthContext";
+import SimpleNft from "@/contract/SimpleNFT.json";
 interface NftTableProps {
   nfts: NftSummary[];
   handleUpdateSaleStatus: (id: string) => void;
 }
 
 const ProfilePage: React.FC = () => {
-  const { userInfo, refreshUserInfo } = useAuth();
+  const { userInfo, refreshUserInfo, account, web3 } = useAuth();
   const [nfts, setNfts] = useState<NftSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const handleUpdateSaleStatus = async (status: number, id: string) => {
+  const handleUpdateSaleStatus = async (
+    status: number,
+    id: string,
+    tokenId: string
+  ) => {
     try {
-      const updateNftDto = {
-        status,
-      };
+      // 获取用户的账户地址
+      const fromAddress = account || "";
+
+      // 获取NFT合约地址和实例
+      const nftContractAddress = "0x96EbeE6c75D884e8A75BD08D95c747e1A804b7DA"; // 从环境变量中获取NFT合约地址
+      const MarketContractAddress =
+        "0x5b394A32eBc59f9D7c99F5883757F03a1E76EbF8";
+      if (!nftContractAddress) {
+        throw new Error(
+          "NFT contract address is not defined in environment variables"
+        );
+      }
+      console.log("test");
+      const nftContract = new web3.eth.Contract(
+        SimpleNft.abi,
+        nftContractAddress
+      );
+
+      // console.log(nftContract, "nftc", fromAddress);
+      // try {
+      //   const owner = await nftContract.methods.ownerOf(tokenId).call();
+      //   console.log(`Owner of tokenId ${tokenId} is: ${owner}`);
+      // } catch (error) {
+      //   console.error(`Token with tokenId ${tokenId} does not exist.`, error);
+      // }
+      console.log("Contract Address:", nftContract.options.address);
+      console.log(MarketContractAddress, tokenId, fromAddress);
+      // const code = await web3.eth.getCode(MarketContractAddress);
+      // if (code === "0x") {
+      //   console.error("MarketContractAddress is not a contract!");
+      // } else {
+      //   console.log("MarketContractAddress is a valid contract.");
+      // }
+      // 调用 approve 方法，授权当前账户管理该NFT
+      await nftContract.methods
+        .approve(MarketContractAddress, tokenId)
+        .send({ from: fromAddress });
+      console.log(
+        `NFT with tokenId ${tokenId} has been approved for address ${fromAddress}`
+      );
+
+      // 更新NFT的销售状态
+      const updateNftDto = { status };
       await updateNft(id, updateNftDto);
       message.success(`NFT with id ${id} Operation Success`);
       await fetchUserCreatedNfts();
     } catch (error) {
       console.error("Error updating NFT:", error);
+      message.error(`Error updating NFT with id ${id}`);
     }
   };
   const fetchUserCreatedNfts = async () => {

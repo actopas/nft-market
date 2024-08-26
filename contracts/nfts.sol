@@ -9,10 +9,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @dev This contract implements a basic NFT using ERC721 standard with URI storage and ownership control.
  */
 contract SimpleNFT is ERC721URIStorage, Ownable {
+    event NFTMinted(address recipient, uint256 tokenId);
     uint256 private _tokenIdCounter;
+    uint256[] private _allTokens; // 存储所有的 tokenId
 
     /**
-     * @dev Constructor that gives the contract owner all tokens and sets the token name and symbol.
+     * @dev Constructor that sets the token name, symbol, and initializes the owner.
      * @param name The name of the NFT token.
      * @param symbol The symbol of the NFT token.
      */
@@ -37,5 +39,14 @@ contract SimpleNFT is ERC721URIStorage, Ownable {
 
         _mint(recipient, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
+        _allTokens.push(newTokenId);
+        emit NFTMinted(recipient, newTokenId); // 发出事件，确认铸造
+    }
+    function getAllTokens() external view returns (uint256[] memory) {
+        return _allTokens;
+    }
+    // 返回已铸造的总数
+    function totalSupply() external view returns (uint256) {
+        return _allTokens.length;
     }
 }

@@ -39,6 +39,8 @@ const CreateContractPage: React.FC = () => {
           rarity: "Rare",
           attributes: ["Attribute1", "Attribute2"], // 根据需要设置属性
         },
+        tokenId: "",
+        tokenURI: "",
         status: 0,
         recommanded: values.recommanded,
         notable: values.notable,
