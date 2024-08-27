@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-22 22:42:09
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-27 06:23:57
+ * @LastEditTime: 2024-08-27 16:04:06
  */
 // app/detail/[id]/page.tsx
 "use client";
@@ -17,7 +17,6 @@ import ProtectedButton from "@/components/ProtectedButton";
 import { useAuth } from "@/context/AuthContext";
 import NftMarketPlace from "@/contract/NFTMarketplace.json";
 import SimpleNFT from "@/contract/SimpleNFT.json";
-import { Contract } from "web3";
 
 export default function NFTDetailPage() {
   const [nft, setNft] = useState<Nft>();
@@ -51,8 +50,9 @@ export default function NFTDetailPage() {
       priceInWei
     );
     const currentOwner = await nftContract.methods.ownerOf(nft.tokenId).call();
-    console.log(currentOwner, sellerAddress);
-    if (!(currentOwner == sellerAddress)) {
+    const formattedSellerAddress = web3.utils.toChecksumAddress(sellerAddress);
+    console.log(currentOwner, sellerAddress, formattedSellerAddress);
+    if (currentOwner !== formattedSellerAddress) {
       throw new Error("Seller does not own the NFT");
     }
     const transaction = await marketContract.methods

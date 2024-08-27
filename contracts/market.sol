@@ -20,12 +20,7 @@ contract NFTMarketplace {
         require(price > 0, "Price must be greater than zero");
         require(msg.value == price, "Incorrect payment amount");
 
-        // 检查卖家是否确实是该NFT的所有者
         IERC721 nft = IERC721(nftContract);
-        require(
-            nft.ownerOf(tokenId) == address(seller),
-            "Seller does not own the NFT"
-        );
 
         // 转移NFT给买家
         nft.safeTransferFrom(seller, msg.sender, tokenId);

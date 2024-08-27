@@ -3,7 +3,7 @@
  * @Author: actopas <fishmooger@gmail.com>
  * @Date: 2024-08-19 15:28:19
  * @LastEditors: actopas
- * @LastEditTime: 2024-08-27 04:57:25
+ * @LastEditTime: 2024-08-27 15:16:39
  */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -34,9 +34,9 @@ const ProfilePage: React.FC = () => {
       const fromAddress = account || "";
 
       // 获取NFT合约地址和实例
-      const nftContractAddress = "0x90407DA01568a3DA87a618fAD54Ab8598D43Ee80"; // 从环境变量中获取NFT合约地址
+      const nftContractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS; // 从环境变量中获取NFT合约地址
       const MarketContractAddress =
-        "0x3B43D352eF3b642d82FadD26841584E41dbe0E8F";
+        process.env.NEXT_PUBLIC_MARKET_CONTRACT_ADDRESS;
       if (!nftContractAddress) {
         throw new Error(
           "NFT contract address is not defined in environment variables"
