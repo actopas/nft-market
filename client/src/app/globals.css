@@ -42,3 +42,23 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.ant-input {
+  color: black; /* 默认输入时的字体颜色为黑色 */
+}
+
+.ant-input:focus {
+  color: black; /* 输入时保持字体颜色为黑色 */
+}
+
+.ant-input:blur {
+  color: white; /* 失去焦点时，字体颜色变为白色 */
+}
+
+.ant-input::placeholder {
+  color: gray; /* 占位符颜色为灰色 */
+}
+
+.ant-input:not(:focus) {
+  color: white; /* 当输入框没有焦点时，字体颜色为白色 */
+}

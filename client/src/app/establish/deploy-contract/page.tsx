@@ -122,7 +122,7 @@ const CreateContractPage: React.FC = () => {
             >
               <Input
                 placeholder="Enter your collection name"
-                className="bg-gray-800 text-white border-none"
+                className="ant-input-custom bg-gray-800 text-white border-none"
               />
             </Form.Item>
 
@@ -132,8 +132,8 @@ const CreateContractPage: React.FC = () => {
               rules={[{ required: true, message: "Please enter a symbol" }]}
             >
               <Input
+                className="ant-input-custom bg-gray-800 text-white border-none"
                 placeholder="MCN"
-                className="bg-gray-800 text-white border-none"
               />
             </Form.Item>
 
@@ -157,7 +157,7 @@ const CreateContractPage: React.FC = () => {
             >
               <Input
                 placeholder="Enter the price in ETH"
-                className="bg-gray-800 text-white border-none"
+                className=" ant-input-custom bg-gray-800 text-white border-none"
                 type="number"
               />
             </Form.Item>
@@ -172,7 +172,7 @@ const CreateContractPage: React.FC = () => {
             >
               <TextArea
                 placeholder="Describe your NFT"
-                className="bg-gray-800 text-white border-none"
+                className="ant-input-custom bg-gray-800 text-white border-none"
                 rows={4}
               />
             </Form.Item>
